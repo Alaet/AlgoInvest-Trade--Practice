@@ -40,7 +40,7 @@ def get_wallet_invest_cost(actions):
 
 
 timer = time.time()
-best = get_best_wallet(actions,500)
+best = get_best_wallet(actions, 500)
 print("************     Temps d'éxécution du calcul:     ************\n----------->     %s seconde(s)" % (
         time.time()-timer))
 invest = get_wallet_invest_cost(best[0])
