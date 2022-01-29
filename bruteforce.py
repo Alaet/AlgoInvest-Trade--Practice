@@ -1,6 +1,6 @@
 import itertools
 import time
-
+from view.view import display_top_wallet
 from data.actions import actions
 
 
@@ -25,6 +25,13 @@ def get_best_wallet(actions, capital):
     return best_wallet
 
 
+def get_wallet_benefit(actions_to_evaluate):
+    benefit_best_wallet = 0
+    for act in actions_to_evaluate:
+        benefit_best_wallet += (act[2] / 100) * act[1]
+    return benefit_best_wallet
+
+
 def get_wallet_invest_cost(actions):
     invest_cost = 0
     for action in actions:
@@ -37,13 +44,5 @@ best = get_best_wallet(actions,500)
 print("************     Temps d'éxécution du calcul:     ************\n----------->     %s seconde(s)" % (
         time.time()-timer))
 invest = get_wallet_invest_cost(best[0])
-
-print("Somme investie : %s€." % invest)
-print("Bénéfices attendus /2ans : %s€." % best[1])
-print("Rentabilité : %s%%." % (round(((best[1]/invest)*100),2)))
-print("Pour %s actions acquises." % len(best[0]))
-print(("Et %s actions scannées" % len(actions)))
-if input("\n************     1 = Afficher liste des actions     ************\n") == str(1):
-    for action in best[0]:
-        summary = "Nom : %s, Prix/Cout : %s, Bénéfices attendus : %s" % (action[0], action[1], action[2])
-        print(summary)
+benefit = get_wallet_benefit(best[0])
+display_top_wallet(invest, benefit, best[0], actions)

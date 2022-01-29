@@ -1,5 +1,6 @@
 import csv
 from data.actions import actions as small_list_actions
+from view.view import display_top_wallet
 import time
 
 
@@ -56,24 +57,17 @@ def get_best_wallet(actions, capital):
 
 
 list_actions = small_list_actions
-csv_actions = read_files(["data/dataset1_Python.csv", "data/dataset2_Python.csv"])
+all_csv_actions = read_files(["data/dataset1_Python.csv", "data/dataset2_Python.csv"])
+csv_actions1 = read_files(["data/dataset1_Python.csv"])
+csv_actions2 = read_files(["data/dataset2_Python.csv"])
 
 timer = time.time()
 
-wallet = get_best_wallet(csv_actions, 500)
+wallet = get_best_wallet(csv_actions2, 500)
 print("************     Temps d'éxécution du calcul:     ************\n----------->     %s seconde(s)" % (time.time(
 
 )-timer))
 benefit_wallet = get_wallet_benefit(wallet)
 invest = get_wallet_invest_cost(wallet)
 
-print("Somme investie : %s€." % round(invest, 2))
-print("Bénéfices attendus /2ans : %s€." % round(benefit_wallet, 2))
-print("Rentabilité : %s%%." % (round((benefit_wallet / invest) * 100, 2)))
-print("Pour %s actions acquises." % len(wallet))
-print(("Et %s actions scannées" % len(csv_actions)))
-if input("\n************    1 = Afficher liste des actions     ************\n") == str(1):
-    for action in wallet:
-        action_summary = "Nom : %s, Prix/Cout : %s, Bénéfices attendus /2ans : %s" % (action[0], float(action[1]),
-                                                                                      float(action[2]))
-        print(action_summary)
+display_top_wallet(invest, benefit_wallet, wallet, all_csv_actions)
