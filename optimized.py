@@ -60,7 +60,7 @@ wallet = get_best_wallet(actions, 500)
 benefit_wallet = get_wallet_benefit(wallet)
 invest = get_wallet_invest_cost(wallet)
 
-print("Somme investie : %s€." % invest)
+print("Somme investie : %s€." % round(invest, 2))
 print("Bénéfices attendus /2ans : %s€." % round(benefit_wallet, 2))
 print("Rentabilité : %s%%." % (round((benefit_wallet/invest)*100,2)))
 print("Pour %s actions acquises." % len(wallet))
