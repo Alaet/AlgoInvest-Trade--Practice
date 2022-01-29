@@ -61,7 +61,9 @@ csv_actions = read_files(["data/dataset1_Python.csv", "data/dataset2_Python.csv"
 timer = time.time()
 
 wallet = get_best_wallet(csv_actions, 500)
-print("************     Temps d'éxécution du calcul:     ************\n----------->     %s" % (time.time()-timer))
+print("************     Temps d'éxécution du calcul:     ************\n----------->     %s seconde(s)" % (time.time(
+
+)-timer))
 benefit_wallet = get_wallet_benefit(wallet)
 invest = get_wallet_invest_cost(wallet)
 
@@ -69,6 +71,7 @@ print("Somme investie : %s€." % round(invest, 2))
 print("Bénéfices attendus /2ans : %s€." % round(benefit_wallet, 2))
 print("Rentabilité : %s%%." % (round((benefit_wallet / invest) * 100, 2)))
 print("Pour %s actions acquises." % len(wallet))
+print(("Et %s actions scannées" % len(csv_actions)))
 if input("\n************    1 = Afficher liste des actions     ************\n") == str(1):
     for action in wallet:
         action_summary = "Nom : %s, Prix/Cout : %s, Bénéfices attendus /2ans : %s" % (action[0], float(action[1]),

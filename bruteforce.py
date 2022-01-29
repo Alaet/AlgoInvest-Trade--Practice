@@ -1,4 +1,5 @@
 import itertools
+import time
 
 from data.actions import actions
 
@@ -31,13 +32,17 @@ def get_wallet_invest_cost(actions):
     return invest_cost
 
 
+timer = time.time()
 best = get_best_wallet(actions,500)
+print("************     Temps d'éxécution du calcul:     ************\n----------->     %s seconde(s)" % (
+        time.time()-timer))
 invest = get_wallet_invest_cost(best[0])
 
 print("Somme investie : %s€." % invest)
 print("Bénéfices attendus /2ans : %s€." % best[1])
 print("Rentabilité : %s%%." % (round(((best[1]/invest)*100),2)))
 print("Pour %s actions acquises." % len(best[0]))
+print(("Et %s actions scannées" % len(actions)))
 if input("\n************     1 = Afficher liste des actions     ************\n") == str(1):
     for action in best[0]:
         summary = "Nom : %s, Prix/Cout : %s, Bénéfices attendus : %s" % (action[0], action[1], action[2])
