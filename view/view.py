@@ -20,8 +20,14 @@ def display_profitability(benefit, invest):
 
 
 def display_top_wallet_actions(wallet):
+    wallet.sort(key=lambda x: x[1], reverse=True)
     if input("\n************    1 = Afficher liste des actions     ************\n") == str(1):
         for action in wallet:
-            action_summary = "Nom : %s, Prix/Cout : %s, Bénéfices attendus /2ans : %s" % (action[0], float(action[1]),
-                                                                                          float(action[2]))
+            action_summary = "Nom : %s, Prix/Cout : %s, Bénéfices attendus /2ans : %s%% (%s€)" % (action[0],
+                                                                                                  float(action[1]),
+                                                                                                  float(action[2]),
+                                                                                                  round((float(action[
+                                                                                                             2])/100)
+                                                                                                  *
+                                                                                                  action[1], 2))
             print(action_summary)
