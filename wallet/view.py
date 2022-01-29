@@ -1,10 +1,10 @@
-def display_top_wallet(invest, benefit, top_wallet, actions):
-    display_invested_amount(invest)
-    display_benefit(benefit)
-    display_profitability(benefit, invest)
-    print("Pour %s actions acquises." % len(top_wallet))
+def display_top_wallet(top_wallet, actions):
+    display_invested_amount(top_wallet.cost)
+    display_benefit(top_wallet.benefit)
+    display_profitability(top_wallet.benefit, top_wallet.cost)
+    print("Pour %s actions acquises." % len(top_wallet.actions))
     print(("Et %s actions scannées" % len(actions)))
-    display_top_wallet_actions(top_wallet)
+    display_top_wallet_actions(top_wallet.actions)
 
 
 def display_invested_amount(invest):
