@@ -1,6 +1,7 @@
 import csv
 from data.actions import actions as small_list_actions
-from view.view import display_top_wallet
+from wallet.view import display_top_wallet
+from wallet.model import Wallet
 import time
 
 
@@ -35,21 +36,21 @@ def get_wallet_invest_cost(actions_to_evaluate):
 def get_best_wallet(actions, capital):
     i = 0
     actions.sort(key=lambda x: x[2], reverse=True)
-    best_wallet = []
+    best_wallet = Wallet([])
 
     while i <= capital:
         allocated_capital = i
-        current_wallet = []
+        current_wallet = Wallet([])
 
         current_wallet_benefit = 0
         for current_action in actions:
             if current_action[1] <= allocated_capital:
-                current_wallet.append(current_action)
+                current_wallet.actions.append(current_action)
                 allocated_capital -= current_action[1]
                 current_wallet_benefit += (current_action[2] / 100) * current_action[1]
 
-        benefit = get_wallet_benefit(best_wallet)
-        if current_wallet_benefit > benefit and len(current_wallet) > 0:
+        benefit = get_wallet_benefit(best_wallet.actions)
+        if current_wallet_benefit > benefit and len(current_wallet.actions) > 0:
             best_wallet = current_wallet
         i += 1
 
@@ -58,16 +59,16 @@ def get_best_wallet(actions, capital):
 
 list_actions = small_list_actions
 all_csv_actions = read_files(["data/dataset1_Python.csv", "data/dataset2_Python.csv"])
-csv_actions1 = read_files(["data/dataset1_Python.csv"])
-csv_actions2 = read_files(["data/dataset2_Python.csv"])
+#csv_actions1 = read_files(["data/dataset1_Python.csv"])
+#csv_actions2 = read_files(["data/dataset2_Python.csv"])
 
 timer = time.time()
 
-wallet = get_best_wallet(csv_actions2, 500)
+wallet = get_best_wallet(all_csv_actions, 500)
 print("************     Temps d'éxécution du calcul:     ************\n----------->     %s seconde(s)" % (time.time(
 
 )-timer))
-benefit_wallet = get_wallet_benefit(wallet)
-invest = get_wallet_invest_cost(wallet)
+wallet.benefit = get_wallet_benefit(wallet.actions)
+wallet.cost = get_wallet_invest_cost(wallet.actions)
 
-display_top_wallet(invest, benefit_wallet, wallet, all_csv_actions)
+display_top_wallet(wallet, all_csv_actions)

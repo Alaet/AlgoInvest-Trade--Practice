@@ -1,6 +1,6 @@
 import itertools
 import time
-from view.view import display_top_wallet
+from wallet.view import display_top_wallet
 from data.actions import actions
 
 
