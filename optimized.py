@@ -42,18 +42,16 @@ def get_best_wallet(actions, capital):
         allocated_capital = i
         current_wallet = Wallet([])
 
-        current_wallet_benefit = 0
         for current_action in actions:
             if current_action[1] <= allocated_capital:
                 current_wallet.actions.append(current_action)
                 allocated_capital -= current_action[1]
-                current_wallet_benefit += (current_action[2] / 100) * current_action[1]
-
+                current_wallet.benefit += (current_action[2] / 100) * current_action[1]
         benefit = get_wallet_benefit(best_wallet.actions)
-        if current_wallet_benefit > benefit and len(current_wallet.actions) > 0:
+        if current_wallet.benefit > benefit and len(current_wallet.actions) > 0:
+            print(i)
             best_wallet = current_wallet
         i += 1
-
     return best_wallet
 
 
