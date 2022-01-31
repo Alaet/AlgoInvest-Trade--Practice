@@ -34,39 +34,28 @@ def get_wallet_invest_cost(actions_to_evaluate):
 
 
 def get_best_wallet(actions, capital):
-    i = 0
     actions.sort(key=lambda x: x[2], reverse=True)
     best_wallet = Wallet([])
-
-    while i <= capital:
-        allocated_capital = i
-        current_wallet = Wallet([])
-
-        for current_action in actions:
-            if current_action[1] <= allocated_capital:
-                current_wallet.actions.append(current_action)
-                allocated_capital -= current_action[1]
-                current_wallet.benefit += (current_action[2] / 100) * current_action[1]
-        benefit = get_wallet_benefit(best_wallet.actions)
-        if current_wallet.benefit > benefit and len(current_wallet.actions) > 0:
-            print(i)
+    allocated_capital = capital
+    current_wallet = Wallet([])
+    for x, current_action in enumerate(actions):
+        if current_action[1] <= allocated_capital:
+            current_wallet.actions.append(current_action)
+            allocated_capital -= current_action[1]
+            current_wallet.benefit += (current_action[2] / 100) * current_action[1]
+            current_wallet.cost = get_wallet_invest_cost(current_wallet.actions)
+        if current_wallet.benefit > best_wallet.benefit:
             best_wallet = current_wallet
-        i += 1
     return best_wallet
 
 
 list_actions = small_list_actions
 all_csv_actions = read_files(["data/dataset1_Python.csv", "data/dataset2_Python.csv"])
-#csv_actions1 = read_files(["data/dataset1_Python.csv"])
-#csv_actions2 = read_files(["data/dataset2_Python.csv"])
-
+csv_actions1 = read_files(["data/dataset1_Python.csv"])
+csv_actions2 = read_files(["data/dataset2_Python.csv"])
 timer = time.time()
-
 wallet = get_best_wallet(all_csv_actions, 500)
-print("************     Temps d'éxécution du calcul:     ************\n----------->     %s seconde(s)" % (time.time(
-
-)-timer))
-wallet.benefit = get_wallet_benefit(wallet.actions)
+print("************     Temps d'éxécution du calcul:"
+      "     ************\n----------->     %s seconde(s)" % (time.time()-timer))
 wallet.cost = get_wallet_invest_cost(wallet.actions)
-
 display_top_wallet(wallet, all_csv_actions)
