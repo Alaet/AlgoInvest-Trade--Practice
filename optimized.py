@@ -51,15 +51,14 @@ def get_best_wallet(actions, capital):
     best_wallet = Wallet([])
     allocated_capital = capital
     current_wallet = Wallet([])
-    for i in range(0, len(actions)):
-        for current_action in actions:
-            if current_action[1] <= allocated_capital:
-                current_wallet.actions.append(current_action)
-                allocated_capital -= current_action[1]
-                current_wallet.benefit += (current_action[2] / 100) * current_action[1]
-                current_wallet.cost = get_wallet_invest_cost(current_wallet.actions)
-            if current_wallet.benefit > best_wallet.benefit:
-                best_wallet = current_wallet
+    for current_action in actions:
+        if current_action[1] <= allocated_capital:
+            current_wallet.actions.append(current_action)
+            allocated_capital -= current_action[1]
+            current_wallet.benefit += (current_action[2] / 100) * current_action[1]
+            current_wallet.cost = get_wallet_invest_cost(current_wallet.actions)
+    if current_wallet.benefit > best_wallet.benefit:
+        best_wallet = current_wallet
     return best_wallet
 
 
@@ -68,8 +67,9 @@ all_csv_actions = read_files(["data/dataset1_Python.csv", "data/dataset2_Python.
 csv_actions1 = read_file("data/dataset1_Python.csv")
 csv_actions2 = read_file("data/dataset2_Python.csv")
 timer = time.time()
-wallet = get_best_wallet(csv_actions1, 500)
+wallet = get_best_wallet(all_csv_actions, 500)
+
 print("************     Temps d'éxécution du calcul:"
       "     ************\n----------->     %s seconde(s)" % (time.time()-timer))
-wallet.cost = get_wallet_invest_cost(wallet.actions)
-display_top_wallet(wallet, csv_actions1)
+display_top_wallet(wallet, all_csv_actions)
+
