@@ -2,13 +2,14 @@ import itertools
 import time
 from wallet.view import display_top_wallet
 from data.actions import actions
+from wallet.model import Wallet
 
 
 def get_best_wallet(actions, capital):
     actions.sort(key=lambda x: x[1])
     highest_cost = actions[-1][1]
 
-    best_wallet = [[], 0, 0]
+    best_wallet = Wallet([])
 
     for evaluated_action in range(0, len(actions)+1):
         wallets_combination = itertools.combinations(actions, evaluated_action)
@@ -20,8 +21,10 @@ def get_best_wallet(actions, capital):
             if 0 <= allocated_capital < highest_cost:
                 for profitable_action in combination:
                     combination_benefit += (profitable_action[2]/100)*profitable_action[1]
-                if combination_benefit > best_wallet[1]:
-                    best_wallet = [combination, combination_benefit]
+                if combination_benefit > best_wallet.benefit:
+                    best_wallet.actions = list(combination)
+                    best_wallet.benefit = combination_benefit
+                    best_wallet.cost = get_wallet_invest_cost(best_wallet.actions)
     return best_wallet
 
 
@@ -43,6 +46,5 @@ timer = time.time()
 best = get_best_wallet(actions, 500)
 print("************     Temps d'éxécution du calcul:     ************\n----------->     %s seconde(s)" % (
         time.time()-timer))
-invest = get_wallet_invest_cost(best[0])
-benefit = get_wallet_benefit(best[0])
-display_top_wallet(invest, benefit, best[0], actions)
+
+display_top_wallet(best, actions)
