@@ -3,3 +3,4 @@ class Wallet:
         self.actions = actions
         self.benefit = 0
         self.cost = 0
+        self.ratio = 0
