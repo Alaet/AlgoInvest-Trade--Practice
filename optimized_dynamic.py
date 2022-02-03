@@ -1,4 +1,5 @@
 import csv
+import math
 from data.actions import stocks as small_stocks_list
 from wallet.view import display_top_wallet
 from wallet.model import Wallet
@@ -60,7 +61,6 @@ def get_best_wallet(stocks, capital):
     :param capital: int
     :return: None
     """
-    import math
     best_wallet = Wallet([])
     capital_invest = capital
     col = len(stocks)

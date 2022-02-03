@@ -83,4 +83,4 @@ stocks_list = small_list_stocks
 all_csv_stocks = read_files(["data/dataset1_Python.csv", "data/dataset2_Python.csv"])
 csv_stocks1 = read_file("data/dataset1_Python.csv")
 csv_stocks2 = read_file("data/dataset2_Python.csv")
-get_best_wallet(all_csv_stocks, 500)
+get_best_wallet(csv_stocks2, 500)
