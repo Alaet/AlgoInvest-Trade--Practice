@@ -1,7 +1,7 @@
 def display_top_wallet(top_wallet, actions):
     display_invested_amount(top_wallet.cost)
     display_benefit(top_wallet.benefit)
-    display_profitability(top_wallet.benefit, top_wallet.cost)
+    display_profitability(top_wallet.ratio)
     print("Pour %s actions acquises." % len(top_wallet.actions))
     print(("Et %s actions scannées" % len(actions)))
     display_top_wallet_actions(top_wallet.actions)
@@ -15,8 +15,8 @@ def display_benefit(benefit):
     print("Bénéfices attendus /2ans : %s€." % round(benefit, 2))
 
 
-def display_profitability(benefit, invest):
-    print("Rentabilité : %s%%." % (round((benefit / invest) * 100, 2)))
+def display_profitability(wallet_ratio):
+    print("Rentabilité : %s%%." % wallet_ratio)
 
 
 def display_top_wallet_actions(wallet):
