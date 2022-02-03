@@ -44,7 +44,7 @@ def get_wallet_invest_cost(actions):
 
 timer = time.time()
 best = get_best_wallet(actions, 500)
-print("************     Temps d'éxécution du calcul:     ************\n----------->     %s seconde(s)" % (
+print("************     Temps d'éxécution du calcul:     ************\n----------->     %s " % (
         time.time()-timer))
 
 display_top_wallet(best, actions)
