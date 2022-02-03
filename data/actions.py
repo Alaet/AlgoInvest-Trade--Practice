@@ -1,4 +1,4 @@
-actions = [
+stocks = [
     ["Action 1", 20, 5],
     ["Action 2", 30, 10],
     ["Action 3", 50, 15],
