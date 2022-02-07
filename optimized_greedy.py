@@ -63,8 +63,9 @@ def get_best_wallet(stocks, capital):
     """
     for stock in stocks:
         benef = stock[2]/100*stock[1]
-        stock.append(benef)
-    stocks = sorted(stocks, key=lambda tup:(-(tup[1]/tup[3]), tup[0]), reverse=True)
+        ratio = stock[1]/benef
+        stock.append(ratio)
+    stocks = sorted(stocks, key=lambda tup:(-tup[3], tup[0]), reverse=True)
     best_wallet = Wallet([])
     allocated_capital = capital
     current_wallet = Wallet([])
