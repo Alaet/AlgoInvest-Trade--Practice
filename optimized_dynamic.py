@@ -65,9 +65,8 @@ def get_best_wallet(stocks, capital):
     capital_invest = capital
     col = len(stocks)
     Matrix = [[0 for row in range(capital_invest+1)] for column in range(col+1)]
-    stock_name = stocks[0]
-    for i_column in range(1, col + 1):
-        for j_row in range(1, capital_invest + 1):
+    for j_row in range(1, capital_invest + 1):
+        for i_column in range(1, col + 1):
             best_price = math.trunc(stocks[i_column - 1][1])
             if best_price <= j_row:
                 Matrix[i_column][j_row] = max(
@@ -82,7 +81,7 @@ def get_best_wallet(stocks, capital):
         capital_invest = math.trunc(capital_invest)
         if Matrix[col][capital_invest] == Matrix[col - 1][capital_invest - math.trunc(stock[1])] \
                 + (stock[2]/100)*stock[1]:
-            best_wallet.stocks.append(stock_name)
+            best_wallet.stocks.append(stock)
             capital_invest -= stock[1]
             best_wallet.cost += stock[1]
         col -= 1
