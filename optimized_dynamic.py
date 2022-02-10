@@ -1,11 +1,17 @@
 import csv
-import math
 from data.actions import stocks as small_stocks_list
 from wallet.view import display_top_wallet
 from wallet.model import Wallet
 import time
 
 timer = time.time()
+
+
+def calculate_stock_benefit(stocks):
+    for stock in stocks:
+        benef = stock[2]/100*stock[1]
+        stock.append(benef)
+    return stocks
 
 
 def read_files(files_names):
@@ -20,8 +26,8 @@ def read_files(files_names):
         csvreader_file = csv.reader(file)
         for action_row in csvreader_file:
             if action_row[1] != "price":
-                action_row[1] = float(action_row[1])
-                action_row[2] = float(action_row[2])
+                action_row[1] = round(float(action_row[1]))
+                action_row[2] = round(float(action_row[2]))
                 if action_row[1] > 0 and action_row[2] > 0:
                     file_stocks_list.append(action_row)
     return file_stocks_list
@@ -38,8 +44,8 @@ def read_file(file_name):
     csvreader_file = csv.reader(file)
     for action_row in csvreader_file:
         if action_row[1] != "price":
-            action_row[1] = float(action_row[1])
-            action_row[2] = float(action_row[2])
+            action_row[1] = round(float(action_row[1]))
+            action_row[2] = round(float(action_row[2]))
             if action_row[1] > 0 and action_row[2] > 0:
                 file_stock_list.append(action_row)
     return file_stock_list
@@ -61,39 +67,34 @@ def get_best_wallet(stocks, capital):
     :param capital: int
     :return: None
     """
-    best_wallet = Wallet([])
-    capital_invest = capital
-    col = len(stocks)
-    Matrix = [[0 for row in range(capital_invest+1)] for column in range(col+1)]
-    for j_row in range(1, capital_invest + 1):
-        for i_column in range(1, col + 1):
-            best_price = math.trunc(stocks[i_column - 1][1])
-            if best_price <= j_row:
-                Matrix[i_column][j_row] = max(
-                    (stocks[i_column - 1][2] / 100 * stocks[i_column - 1][1]) + Matrix[i_column - 1][j_row -
-                                                                                                     best_price],
-                    Matrix[i_column - 1][j_row])
-            else:
-                Matrix[i_column][j_row] = Matrix[i_column - 1][j_row]
 
-    while col > 1:
-        stock = stocks[col - 1]
-        capital_invest = math.trunc(capital_invest)
-        if Matrix[col][capital_invest] == Matrix[col - 1][capital_invest - math.trunc(stock[1])] \
-                + (stock[2]/100)*stock[1]:
-            best_wallet.stocks.append(stock)
-            capital_invest -= stock[1]
-            best_wallet.cost += stock[1]
-        col -= 1
-    best_wallet.benefit = Matrix[-1][-1]
+    calculate_stock_benefit(stocks)
+    best_wallet = Wallet([])
+    number_of_stocks = len(stocks)
+    Matrix = [[0 for x in range(capital+1)] for x in range(number_of_stocks+1)]
+    for i in range(1, number_of_stocks + 1):
+        for j in range(1, capital + 1):
+            if stocks[i - 1][1] <= j:
+                Matrix[i][j] = max(stocks[i - 1][3] + Matrix[i - 1][j - stocks[i - 1][1]], Matrix[i - 1][j])
+            else:
+                Matrix[i][j] = Matrix[i - 1][j]
+
+    while capital >= 0 and number_of_stocks >= 0:
+        if Matrix[number_of_stocks][capital] != Matrix[number_of_stocks - 1][capital]:
+            best_wallet.stocks.append(stocks[number_of_stocks - 1])
+            best_wallet.benefit += stocks[number_of_stocks - 1][3]
+            best_wallet.cost += stocks[number_of_stocks - 1][1]
+            capital -= stocks[number_of_stocks - 1][1]
+        number_of_stocks -= 1
+
     best_wallet.ratio = round(best_wallet.benefit/best_wallet.cost*100, 2)
     print("************     Temps d'éxécution du calcul:"
           "     ************\n----------->     %s " % (time.time() - timer))
-    display_top_wallet(best_wallet, all_csv_stocks)
+    display_top_wallet(best_wallet, csv_stocks2)
 
 
 stocks_list = small_stocks_list
 all_csv_stocks = read_files(["data/dataset1_Python.csv", "data/dataset2_Python.csv"])
 csv_stocks1 = read_file("data/dataset1_Python.csv")
 csv_stocks2 = read_file("data/dataset2_Python.csv")
-get_best_wallet(all_csv_stocks, 500)
+get_best_wallet(csv_stocks2, 500)
