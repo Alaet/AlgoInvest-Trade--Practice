@@ -63,14 +63,14 @@ def get_best_wallet(stocks, capital):
     """
     for stock in stocks:
         benef = stock[2]/100*stock[1]
-        ratio = stock[1]/benef
+        ratio = benef/stock[1]
         stock.append(ratio)
-    stocks = sorted(stocks, key=lambda tup:(-tup[3], tup[0]), reverse=True)
+    stocks = sorted(stocks, key=lambda tup:(-tup[3], tup[0]))
     best_wallet = Wallet([])
     allocated_capital = capital
     current_wallet = Wallet([])
     for current_stock in stocks:
-        if current_stock[1] <= allocated_capital:
+        if 0 <= current_stock[1] <= allocated_capital:
             current_wallet.stocks.append(current_stock)
             allocated_capital -= current_stock[1]
             current_wallet.benefit += (current_stock[2] / 100) * current_stock[1]
@@ -80,11 +80,11 @@ def get_best_wallet(stocks, capital):
     print("************     Temps d'éxécution du calcul:"
           "     ************\n----------->     %s " % (time.time() - timer))
     best_wallet.ratio = round(best_wallet.benefit/best_wallet.cost*100, 2)
-    display_top_wallet(best_wallet, all_csv_stocks)
+    display_top_wallet(best_wallet, csv_stocks2)
 
 
 stocks_list = small_list_stocks
 all_csv_stocks = read_files(["data/dataset1_Python.csv", "data/dataset2_Python.csv"])
 csv_stocks1 = read_file("data/dataset1_Python.csv")
 csv_stocks2 = read_file("data/dataset2_Python.csv")
-get_best_wallet(all_csv_stocks, 500)
+get_best_wallet(csv_stocks2, 500)
