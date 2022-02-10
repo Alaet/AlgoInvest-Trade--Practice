@@ -8,6 +8,21 @@ timer = time.time()
 
 
 def calculate_stock_benefit(stocks):
+    """
+    Take a list of stock and for each stock will add the profitability for it to it
+    (stock_percent_profitability/100*stock_price)
+    :param stocks: list[
+                        [stock_name,
+                         stock_price,
+                         stock_percent_profitability]
+                        ]
+    :return: list[
+                        [stock_name,
+                         stock_price,
+                         stock_percent_profitability,
+                         stock_profitability]
+                        ]
+    """
     for stock in stocks:
         benef = stock[2]/100*stock[1]
         stock.append(benef)
@@ -53,12 +68,10 @@ def read_file(file_name):
 
 def get_best_wallet(stocks, capital):
     """
-    Take list of stock and maximum capital to return, one, of the most profitable wallet possible.
-    By using Knapsack dynamic approach, will set a matrix with capital as W(eight), and V(alue) being the
-    profitability for each stock.
-    After rentability of a given stock for every given capital, will search from end of the matrix the best values,
-    add them to an object(Wallet()) and therefore, stocks that were included based on precedent cell values and so
-    on until max value is found.
+    Take list of stock and maximum capital to return the most profitable wallet possible.
+    By using Knapsack dynamic approach, will set a matrix with each possibility of capital investment as row,
+    and number of stocks as line.
+    Will then search through existing result for the best combination based on profitability and capital invested.
     :param stocks: list[
                         [stock_name,
                          stock_price,
