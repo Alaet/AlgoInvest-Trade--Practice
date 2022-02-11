@@ -1,5 +1,5 @@
 import itertools
-import time
+from timeit import timeit
 from wallet.view import display_top_wallet
 from data.actions import stocks as small_stocks_list
 from wallet.model import Wallet
@@ -39,9 +39,8 @@ def get_best_wallet(stocks, capital):
                     best_wallet.cost = get_wallet_invest_cost(best_wallet.stocks)
 
     best_wallet.ratio = round(best_wallet.benefit / best_wallet.cost * 100, 2)
-    print("************     Temps d'éxécution du calcul:     ************\n----------->     %s " % (
-            time.time() - timer))
-    display_top_wallet(best_wallet, small_stocks_list)
+
+    return best_wallet
 
 
 def get_wallet_invest_cost(stocks):
@@ -60,5 +59,7 @@ def get_wallet_invest_cost(stocks):
     return invest_cost
 
 
-timer = time.time()
-get_best_wallet(small_stocks_list, 500)
+time = timeit("get_best_wallet(stocks, 500)", setup="from data.actions import stocks", number=1, globals=globals())
+final_wallet = get_best_wallet(small_stocks_list, 500)
+print("************     Temps d'éxécution du calcul:     ************\n----------->     %s " % time)
+display_top_wallet(final_wallet, small_stocks_list)
