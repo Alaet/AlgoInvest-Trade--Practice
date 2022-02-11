@@ -2,15 +2,15 @@ import csv
 from data.actions import stocks as small_list_stocks
 from wallet.view import display_top_wallet
 from wallet.model import Wallet
-import time
+from timeit import timeit
 
-timer = time.time()
+# region CSV READ FUNCTIONS
 
 
 def read_files(files_names):
     """
     Take a list of csv file path to return csv files data's as a single list
-    :param files_names: list[path,*]
+    :param files_names: list[%path%,*] -> type(.csv)
     :return: list[csv_files_datas]
     """
     file_stocks_list = []
@@ -42,6 +42,7 @@ def read_file(file_name):
             if stock_row[1] > 0 and stock_row[2] > 0:
                 file_stock_list.append(stock_row)
     return file_stock_list
+# endregion
 
 
 def get_best_wallet(stocks, capital):
@@ -65,7 +66,7 @@ def get_best_wallet(stocks, capital):
         benef = stock[2]/100*stock[1]
         ratio = benef/stock[1]
         stock.append(ratio)
-    stocks = sorted(stocks, key=lambda tup:(-tup[3], tup[0]))
+    stocks = sorted(stocks, key=lambda tup: (-tup[3], tup[0]))
     best_wallet = Wallet([])
     allocated_capital = capital
     current_wallet = Wallet([])
@@ -77,14 +78,16 @@ def get_best_wallet(stocks, capital):
             current_wallet.cost += current_stock[1]
     if current_wallet.benefit > best_wallet.benefit:
         best_wallet = current_wallet
-    print("************     Temps d'éxécution du calcul:"
-          "     ************\n----------->     %s " % (time.time() - timer))
     best_wallet.ratio = round(best_wallet.benefit/best_wallet.cost*100, 2)
-    display_top_wallet(best_wallet, csv_stocks2)
+    return best_wallet
 
 
 stocks_list = small_list_stocks
 all_csv_stocks = read_files(["data/dataset1_Python.csv", "data/dataset2_Python.csv"])
 csv_stocks1 = read_file("data/dataset1_Python.csv")
 csv_stocks2 = read_file("data/dataset2_Python.csv")
-get_best_wallet(csv_stocks2, 500)
+
+time = timeit("get_best_wallet(csv_stocks2, 500)", number=1, globals=globals())
+final_wallet = get_best_wallet(csv_stocks2, 500)
+print("************     Temps d'éxécution du calcul:     ************\n----------->     %s " % time)
+display_top_wallet(final_wallet, csv_stocks2)
