@@ -2,31 +2,10 @@ import csv
 from data.actions import stocks as small_stocks_list
 from wallet.view import display_top_wallet
 from wallet.model import Wallet
-import time
-
-timer = time.time()
+from timeit import timeit
 
 
-def calculate_stock_benefit(stocks):
-    """
-    Take a list of stock and for each stock will add the profitability for it to it
-    (stock_percent_profitability/100*stock_price)
-    :param stocks: list[
-                        [stock_name,
-                         stock_price,
-                         stock_percent_profitability]
-                        ]
-    :return: list[
-                        [stock_name,
-                         stock_price,
-                         stock_percent_profitability,
-                         stock_profitability]
-                        ]
-    """
-    for stock in stocks:
-        benef = stock[2]/100*stock[1]
-        stock.append(benef)
-    return stocks
+# region CSV READ FUNCTION
 
 
 def read_files(files_names):
@@ -66,6 +45,30 @@ def read_file(file_name):
     return file_stock_list
 
 
+# endregion
+
+def calculate_stock_benefit(stocks):
+    """
+    Take a list of stock and for each stock will add the profitability for it to it
+    (stock_percent_profitability/100*stock_price)
+    :param stocks: list[
+                        [stock_name,
+                         stock_price,
+                         stock_percent_profitability]
+                        ]
+    :return: list[
+                        [stock_name,
+                         stock_price,
+                         stock_percent_profitability,
+                         stock_profitability]
+                        ]
+    """
+    for stock in stocks:
+        benef = stock[2]/100*stock[1]
+        stock.append(benef)
+    return stocks
+
+
 def get_best_wallet(stocks, capital):
     """
     Take list of stock and maximum capital to return the most profitable wallet possible.
@@ -101,13 +104,16 @@ def get_best_wallet(stocks, capital):
         number_of_stocks -= 1
 
     best_wallet.ratio = round(best_wallet.benefit/best_wallet.cost*100, 2)
-    print("************     Temps d'éxécution du calcul:"
-          "     ************\n----------->     %s " % (time.time() - timer))
-    display_top_wallet(best_wallet, csv_stocks2)
+
+    return best_wallet
 
 
 stocks_list = small_stocks_list
 all_csv_stocks = read_files(["data/dataset1_Python.csv", "data/dataset2_Python.csv"])
 csv_stocks1 = read_file("data/dataset1_Python.csv")
 csv_stocks2 = read_file("data/dataset2_Python.csv")
-get_best_wallet(csv_stocks2, 500)
+
+time = timeit("get_best_wallet(csv_stocks2, 500)", number=1, globals=globals())
+final_wallet = get_best_wallet(csv_stocks2, 500)
+print("************     Temps d'éxécution du calcul:     ************\n----------->     %s " % time)
+display_top_wallet(final_wallet, csv_stocks2)
