@@ -115,5 +115,6 @@ csv_stocks2 = read_file("data/dataset2_Python.csv")
 
 time = timeit("get_best_wallet(csv_stocks2, 500)", number=1, globals=globals())
 final_wallet = get_best_wallet(csv_stocks2, 500)
-print("************     Temps d'éxécution du calcul:     ************\n----------->     %s " % time)
+print("************     Temps d'éxécution du calcul:     ************\n----------->     %s (secondes)     "
+      "<-----------" % round(time, 5))
 display_top_wallet(final_wallet, csv_stocks2)

@@ -61,5 +61,6 @@ def get_wallet_invest_cost(stocks):
 
 time = timeit("get_best_wallet(stocks, 500)", setup="from data.actions import stocks", number=1, globals=globals())
 final_wallet = get_best_wallet(small_stocks_list, 500)
-print("************     Temps d'éxécution du calcul:     ************\n----------->     %s " % time)
+print("************     Temps d'éxécution du calcul:     ************\n----------->     %s (secondes)     "
+      "<-----------" % round(time, 5))
 display_top_wallet(final_wallet, small_stocks_list)
