@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+/flake8-html/
+/setup.cfg
+AlgoInvest&Trade.pptx
